@@ -16,7 +16,7 @@ export function TopicSidebar({ activeSlug }: TopicSidebarProps) {
     .filter((topic): topic is NonNullable<typeof topic> => topic !== undefined);
 
   return (
-    <nav className="hidden w-48 shrink-0 flex-col gap-1 border-r border-zinc-200 px-4 py-4 lg:flex">
+    <nav className="hidden w-48 shrink-0 flex-col gap-1 border-r border-zinc-200 px-4 py-4 lg:sticky lg:top-0 lg:flex lg:self-start">
       {topics.map((topic) => (
         <Link
           key={topic.slug}
