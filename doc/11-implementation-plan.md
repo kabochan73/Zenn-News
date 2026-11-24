@@ -55,10 +55,10 @@
 
 ### フェーズ3. Zenn API連携
 
-- [ ] `types/article.ts`：Article型の定義
-- [ ] `lib/topics.ts`：41トピックの定義（カテゴリ別）
-- [ ] `lib/zenn.ts`：Zenn APIを呼ぶ関数（`'use cache'`＋`cacheLife('days')`、User-Agentの設定を含む）
-- [ ] ローカルで任意のトピックの記事一覧が取得できることを確認
+- [x] `types/article.ts`：Article型の定義
+- [x] `lib/topics.ts`：41トピックの定義（カテゴリ別）
+- [x] `lib/zenn.ts`：Zenn APIを呼ぶ関数（`'use cache'`＋`cacheLife('days')`、User-Agentの設定を含む）
+- [x] ローカルで任意のトピックの記事一覧が取得できることを確認
 
 **完了の目安**：ローカルで任意のトピックの記事一覧を取得できる
 
