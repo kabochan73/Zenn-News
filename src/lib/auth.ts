@@ -1,6 +1,7 @@
 import "server-only";
 import { compare, hash } from "bcryptjs";
 import { jwtVerify, SignJWT } from "jose";
+import { cookies } from "next/headers";
 
 export const SESSION_COOKIE_NAME = "zenn_news_session";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
@@ -56,4 +57,14 @@ export async function verifySessionToken(
   } catch {
     return false;
   }
+}
+
+export async function getCurrentSession(): Promise<SessionPayload | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  if (!token) {
+    return null;
+  }
+  const session = await verifySessionToken(token);
+  return session || null;
 }
