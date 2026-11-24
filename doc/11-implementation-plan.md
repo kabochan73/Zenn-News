@@ -87,11 +87,11 @@
 
 ### フェーズ6. 既読・ブックマーク操作
 
-- [ ] `app/api/me/read-articles/route.ts`：POST（既読追加）を追加
-- [ ] `app/api/me/bookmarks/route.ts`：POST（追加・100件上限チェック）・DELETE（解除）を追加
-- [ ] `hooks/useReadArticles.ts`・`hooks/useBookmarks.ts`：mutationと楽観的UI更新を追加
-- [ ] 記事カードをクリックしたときの既読化
-- [ ] ブックマークボタンの切り替えと、上限エラーのトースト表示
+- [x] `app/api/me/read-articles/route.ts`：POST（既読追加）を追加
+- [x] `app/api/me/bookmarks/route.ts`：POST（追加・100件上限チェック）・DELETE（解除）を追加
+- [x] `hooks/useReadArticles.ts`・`hooks/useBookmarks.ts`：mutationと楽観的UI更新を追加
+- [x] 記事カードをクリックしたときの既読化
+- [x] ブックマークボタンの切り替えと、上限エラーのトースト表示
 
 **完了の目安**：既読化・ブックマークの操作がDBに反映され、タブの表示が更新される
 

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ArticleCard } from "@/components/home/ArticleCard";
 import { HomeTabs, type Tab } from "@/components/home/HomeTabs";
+import { Toast } from "@/components/ui/Toast";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useReadArticles } from "@/hooks/useReadArticles";
 import type { Article } from "@/types/article";
@@ -19,8 +20,9 @@ const EMPTY_MESSAGE: Record<Tab, string> = {
 
 export function ArticleList({ articles }: ArticleListProps) {
   const [tab, setTab] = useState<Tab>("new");
-  const { readArticleIds } = useReadArticles();
-  const { bookmarks } = useBookmarks();
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const { readArticleIds, markAsRead } = useReadArticles();
+  const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
 
   const readIdSet = useMemo(() => new Set(readArticleIds), [readArticleIds]);
   const bookmarkedIdSet = useMemo(
@@ -56,6 +58,28 @@ export function ArticleList({ articles }: ArticleListProps) {
         ? readArticlesList
         : bookmarkArticles;
 
+  async function handleToggleBookmark(article: Article) {
+    try {
+      if (bookmarkedIdSet.has(article.id)) {
+        await removeBookmark(article.id);
+        return;
+      }
+
+      await addBookmark({
+        articleId: article.id,
+        path: article.path,
+        title: article.title,
+        authorName: article.author.name,
+        authorAvatarUrl: article.author.avatarUrl,
+        publishedAt: article.publishedAt,
+      });
+    } catch (error) {
+      setToastMessage(
+        error instanceof Error ? error.message : "操作に失敗しました",
+      );
+    }
+  }
+
   return (
     <div className="flex flex-1 flex-col">
       <HomeTabs selected={tab} onSelect={setTab} counts={counts} />
@@ -71,10 +95,15 @@ export function ArticleList({ articles }: ArticleListProps) {
                 article={article}
                 isRead={tab === "read"}
                 isBookmarked={bookmarkedIdSet.has(article.id)}
+                onOpen={() => markAsRead(article.id)}
+                onToggleBookmark={() => handleToggleBookmark(article)}
               />
             </li>
           ))}
         </ul>
+      )}
+      {toastMessage && (
+        <Toast message={toastMessage} onDismiss={() => setToastMessage(null)} />
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const READ_ARTICLES_QUERY_KEY = ["read-articles"];
 
@@ -13,14 +13,47 @@ async function fetchReadArticleIds(): Promise<number[]> {
   return data.readArticleIds;
 }
 
+async function markArticleAsRead(articleId: number): Promise<void> {
+  const res = await fetch("/api/me/read-articles", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ articleId }),
+  });
+  if (!res.ok) {
+    throw new Error("既読にできませんでした");
+  }
+}
+
 export function useReadArticles() {
+  const queryClient = useQueryClient();
+
   const query = useQuery({
     queryKey: READ_ARTICLES_QUERY_KEY,
     queryFn: fetchReadArticleIds,
   });
 
+  const mutation = useMutation({
+    mutationFn: markArticleAsRead,
+    onMutate: async (articleId) => {
+      const previous =
+        queryClient.getQueryData<number[]>(READ_ARTICLES_QUERY_KEY) ?? [];
+      queryClient.setQueryData<number[]>(READ_ARTICLES_QUERY_KEY, (current) =>
+        (current ?? []).includes(articleId)
+          ? (current ?? [])
+          : [...(current ?? []), articleId],
+      );
+      return { previous };
+    },
+    onError: (_error, _articleId, context) => {
+      if (context) {
+        queryClient.setQueryData(READ_ARTICLES_QUERY_KEY, context.previous);
+      }
+    },
+  });
+
   return {
     readArticleIds: query.data ?? [],
     isLoading: query.isLoading,
+    markAsRead: mutation.mutate,
   };
 }

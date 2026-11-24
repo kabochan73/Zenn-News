@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     );
   }
 
-  await db
+  const [inserted] = await db
     .insert(bookmarks)
     .values({
       userId: session.sub,
@@ -89,9 +89,18 @@ export async function POST(request: Request) {
       authorAvatarUrl,
       publishedAt: new Date(publishedAt),
     })
-    .onConflictDoNothing();
+    .onConflictDoNothing()
+    .returning({
+      articleId: bookmarks.articleId,
+      path: bookmarks.path,
+      title: bookmarks.title,
+      authorName: bookmarks.authorName,
+      authorAvatarUrl: bookmarks.authorAvatarUrl,
+      publishedAt: bookmarks.publishedAt,
+      bookmarkedAt: bookmarks.bookmarkedAt,
+    });
 
-  return NextResponse.json({ ok: true }, { status: 201 });
+  return NextResponse.json({ bookmark: inserted ?? null }, { status: 201 });
 }
 
 export async function DELETE(request: Request) {
