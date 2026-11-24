@@ -12,7 +12,7 @@ export function AppShell({ children, hideNav = false }: AppShellProps) {
   return (
     <>
       <Header minimal={hideNav} />
-      <div className="flex flex-1 flex-col pb-16 lg:pb-0">{children}</div>
+      <div className="flex flex-1 flex-col">{children}</div>
       <Footer />
       {!hideNav && <BottomNav />}
     </>
