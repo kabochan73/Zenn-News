@@ -24,9 +24,9 @@ async function TopicFeed({ params }: { params: Params }) {
   const articles = await getArticlesByTopic(slug);
 
   return (
-    <div className="flex flex-1 flex-col lg:flex-row">
+    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col lg:flex-row">
       <TopicSidebar activeSlug={slug} />
-      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
+      <div className="flex w-full flex-1 flex-col">
         <TopicBar activeSlug={slug} />
         <ArticleList articles={articles} />
       </div>
