@@ -36,7 +36,7 @@
 | ペイロード | `{ sub: userId, username }` |
 | 署名鍵 | 環境変数 `AUTH_SECRET`（ランダムな文字列） |
 | Cookie | httpOnly・secure（本番）・sameSite=lax、有効期限30日 |
-| 検証場所 | `proxy.ts`（Next.js Middleware、Edge runtime）。DBにはアクセスせず、JWTの署名と期限だけを見る |
+| 検証場所 | `proxy.ts`（Next.js 16の仕組み。旧称Middleware、デフォルトでNode.jsランタイム）。DBにはアクセスせず、JWTの署名と期限だけを見る |
 | 検証方法 | `jose` の `jwtVerify(token, secretKey)` を使う。**独自の署名比較ロジックは書かない**（下記「注意」参照） |
 | 未ログイン・検証失敗時 | `/login`・`/signup` 以外へのアクセスはすべて `/login` にリダイレクトする |
 

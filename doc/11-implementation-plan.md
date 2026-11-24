@@ -42,14 +42,14 @@
 
 ### フェーズ2. 認証
 
-- [ ] `lib/auth.ts`：bcryptでのハッシュ化・照合関数
-- [ ] `lib/auth.ts`：joseでのJWT発行・検証関数（改ざん・期限切れトークンを弾くテストを先に書く）
-- [ ] `app/signup/page.tsx`・`components/auth/SignupForm.tsx`
-- [ ] `app/api/signup/route.ts`：ユーザー名重複チェック→ハッシュ化→INSERT→Cookie発行
-- [ ] `app/login/page.tsx`・`components/auth/LoginForm.tsx`
-- [ ] `app/api/login/route.ts`：ユーザー名・パスワード照合→Cookie発行
-- [ ] `app/api/logout/route.ts`：Cookie削除
-- [ ] `proxy.ts`：未ログイン時のリダイレクト
+- [x] `lib/auth.ts`：bcryptでのハッシュ化・照合関数
+- [x] `lib/auth.ts`：joseでのJWT発行・検証関数（改ざん・期限切れトークンを弾くテストを先に書く）
+- [x] `app/signup/page.tsx`・`components/auth/SignupForm.tsx`
+- [x] `app/api/signup/route.ts`：ユーザー名重複チェック→ハッシュ化→INSERT→Cookie発行
+- [x] `app/login/page.tsx`・`components/auth/LoginForm.tsx`
+- [x] `app/api/login/route.ts`：ユーザー名・パスワード照合→Cookie発行
+- [x] `app/api/logout/route.ts`：Cookie削除
+- [x] `proxy.ts`：未ログイン時のリダイレクト
 
 **完了の目安**：誰でもサインアップ・ログイン・ログアウトができ、未ログインで保護ページに入れない
 

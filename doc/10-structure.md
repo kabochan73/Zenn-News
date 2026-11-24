@@ -105,4 +105,4 @@ src/
 | `hooks/*` | CC専用 | TanStack Queryは`'use client'`配下で使うため |
 | `lib/zenn.ts`・`lib/db.ts`・`lib/schema.ts` | サーバー専用 | `import 'server-only'` を付けて、ブラウザ側のコードに入り込むのを防ぐ |
 | `lib/auth.ts` | サーバー専用 | JWTの署名鍵（`AUTH_SECRET`）・bcryptを扱うため、`proxy.ts`とAPI Route Handlerからのみ呼ぶ |
-| `proxy.ts` | Edge Middleware | Next.jsの仕組み上、SC/CCの分類の外。全パスの手前で1回だけ実行される |
+| `proxy.ts` | Proxy（Next.js 16の仕組み。旧称Middleware、デフォルトでNode.jsランタイム） | Next.jsの仕組み上、SC/CCの分類の外。全パスの手前で1回だけ実行される |

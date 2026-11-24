@@ -28,7 +28,7 @@
 | DBドライバ | `@neondatabase/serverless` | NeonのHTTP経由ドライバ。Edge/サーバーレス関数から高速に接続できる |
 | ORM | Drizzle ORM（`drizzle-orm/neon-http`） | 型安全なクエリ、セットアップが軽量。Drizzle Kitでマイグレーション管理 |
 | パスワードハッシュ | bcryptjs | pure JS実装のため、Node runtimeのRoute Handlerでネイティブビルド不要で動く |
-| 認証セッション | jose（JWTの発行・検証） ＋ Next.js Middleware | 詳細は [認証](03-auth.md) |
+| 認証セッション | jose（JWTの発行・検証） ＋ Next.js 16のProxy（`proxy.ts`、旧称Middleware） | 詳細は [認証](03-auth.md) |
 
 ## テスト
 
