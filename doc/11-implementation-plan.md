@@ -64,12 +64,12 @@
 
 ### フェーズ4. トピック設定・入り口
 
-- [ ] `app/api/me/favorite-topics/route.ts`：GET（取得）・PUT（置き換え）
-- [ ] `hooks/useFavoriteTopics.ts`：TanStack Queryでの取得・更新
-- [ ] `components/topics/TopicSelector.tsx`：カテゴリ別の選択UI
-- [ ] `app/topics/page.tsx`：トピック設定画面
-- [ ] 初回誘導（`?welcome=1`）の表示切り替え（下のタブ・ヘッダーのリンクを隠す）
-- [ ] `app/page.tsx`：入り口（クライアントで`useFavoriteTopics`を見て`redirect`）
+- [x] `app/api/me/favorite-topics/route.ts`：GET（取得）・PUT（置き換え）
+- [x] `hooks/useFavoriteTopics.ts`：TanStack Queryでの取得・更新
+- [x] `components/topics/TopicSelector.tsx`：カテゴリ別の選択UI
+- [x] `app/topics/page.tsx`：トピック設定画面
+- [ ] 初回誘導（`?welcome=1`）の表示切り替え（下のタブ・ヘッダーのリンクを隠す）※ヘッダー・下タブ自体はフェーズ5で作るため、それと合わせて対応する
+- [x] `app/page.tsx`：入り口（クライアントで`useFavoriteTopics`を見て`redirect`）
 
 **完了の目安**：お気に入りの選択・保存・初回誘導が動き、2つ目のアカウントでも独立して動く
 
