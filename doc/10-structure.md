@@ -8,7 +8,7 @@
 src/
 ├── proxy.ts                         認証チェック（/login, /signup 以外のすべてのパスを保護。JWT検証のみ）
 ├── app/                                  画面とルーティング（App Router）
-│   ├── layout.tsx                        ルートのレイアウト（ヘッダー、フッター、QueryProviderを含む）
+│   ├── layout.tsx                        ルートのレイアウト（QueryProviderで全体を包む。ヘッダー・フッターは各ページの`AppShell`が出す）
 │   ├── globals.css
 │   ├── not-found.tsx                     404ページ
 │   ├── error.tsx                         エラー画面
@@ -17,8 +17,7 @@ src/
 │   ├── signup/page.tsx                   サインアップ       /signup
 │   ├── topics/
 │   │   ├── page.tsx                      トピック設定       /topics（初回は ?welcome=1）
-│   │   └── [slug]/page.tsx               ホーム（ISR）      /topics/nextjs など
-│   ├── bookmarks/page.tsx                ブックマーク一覧   /bookmarks
+│   │   └── [slug]/page.tsx               ホーム             /topics/nextjs など
 │   └── api/
 │       ├── signup/route.ts               ユーザー作成：重複チェック→bcryptハッシュ化→INSERT→Cookie発行
 │       ├── login/route.ts                ログイン：ユーザー名で検索→bcrypt照合→Cookie発行
@@ -30,7 +29,7 @@ src/
 ├── components/
 │   ├── providers/QueryProvider.tsx       TanStack Queryの `QueryClientProvider`（CC）
 │   ├── ui/                               自作の汎用部品（Button、Toast）
-│   ├── layout/                           Header（ログアウトボタン含む）、BottomNav、Footer
+│   ├── layout/                           Header（TOPICSリンク・ログアウトボタン）、BottomNav、Footer、AppShell
 │   ├── home/                             TopicBar、TopicSidebar、HomeTabs、ArticleCard、ArticleList
 │   ├── topics/                           TopicSelector（カテゴリ別のトピック選択）
 │   └── auth/                             LoginForm、SignupForm
@@ -62,7 +61,6 @@ src/
 | `/`（入り口） | SSG ＋ ブラウザで処理 | `useFavoriteTopics`（TanStack Query）で取得し、クライアントで最初のトピック（または `/topics?welcome=1`）へ `router.replace()` する |
 | `/topics/[slug]` | **静的（`generateStaticParams`で全41トピックをビルド時に生成、`'use cache'`＋`cacheLife`で更新）** | Zenn APIから取得した記事一覧は全ユーザー共通なので、トピックごとにページ全体をキャッシュできる（詳細は [記事の取得](04-article-fetch.md)）。既読・🔖の状態は `useReadArticles`・`useBookmarks` がクライアントで取得して重ねる |
 | `/topics` | SSG ＋ ブラウザで処理 | トピック一覧（41個）は固定なのでビルド時に作る。選択状態は `useFavoriteTopics` で取得する |
-| `/bookmarks` | SSG の枠 ＋ ブラウザで処理 | ページ自体は固定の枠のみ。内容は `useBookmarks` がクライアントで取得する。Zenn APIへのアクセスは発生しない |
 | `not-found` | SSG | 固定の内容 |
 
 ### 認証（Middleware）とISRの関係
@@ -84,18 +82,26 @@ src/
 
 今回はTanStack Queryでクライアント側に既読・ブックマーク・お気に入りトピックをキャッシュする方式を採用した。トピックを何度切り替えても、キャッシュが新しい間（`staleTime`内）はDBへ再度問い合わせない。トレードオフとして、ページ表示直後の一瞬は全記事がNEW扱いで表示され、取得が完了した時点でREAD/BOOKMARKの表示に切り替わることがある（旧版のlocalStorage版と同じ挙動で、今回もこれを許容する）。
 
+### BOOKMARKタブへのナビショートカットを見送った理由
+
+当初は専用の`/bookmarks`ページを作っていたが、ホーム（`/topics/[slug]`）のBOOKMARKタブと表示内容が完全に重複していたため削除した。その代替として、ナビ（ヘッダー・下タブ）の「BOOKMARK」リンクを「現在（または最初のお気に入り）トピックのBOOKMARKタブを開いた状態で開く」ショートカット（`/topics/[slug]?tab=bookmark`）に変更する案も実装したが、以下の理由で見送り、ナビからは完全に削除した。
+
+- トピックページを開けば、NEW/READ/BOOKMARKタブは常に画面内に表示されている。ナビのショートカットは、すでに見えているタブへの別入口を増やすだけで、体験上のメリットが小さい
+- `searchParams`の`tab`を読む実装にすると、`/topics/[slug]`が`generateStaticParams`による完全な静的ページ（[上の表](#レンダリング方式)参照）にできなくなる（Partial Prerenderになり、一部の最適化が効かなくなる）
+- 結果として、ナビは「TOPICS」と「HOME」のみとし、ブックマークはトピックページ内のタブ切り替えで見る方針にした
+
 ## Server ComponentとClient Componentの分け方
 
 **基本ルール**：ページとレイアウトはServer Component（SC）にする。`'use client'`は、状態・クリック操作が必要な末端の部品にだけ付ける。
 
 | ファイル | 種類 | 理由 |
 |---|---|---|
-| `app/layout.tsx` | SC | ヘッダー・フッターを並べ、`QueryProvider`（CC）で全体を包む |
+| `app/layout.tsx` | SC | `QueryProvider`（CC）で全体を包むだけ。ヘッダー・フッターはページ側の`AppShell`が出す |
 | `app/page.tsx`（入り口） | SC | 中で移動処理用の小さなCC（`useFavoriteTopics`を使う）を表示するだけ |
-| `app/login/page.tsx`・`app/signup/page.tsx` | SC | フォームの部分だけ`LoginForm`・`SignupForm`（CC）に任せる |
-| `app/topics/[slug]/page.tsx` | SC（ISR） | `lib/zenn.ts`で記事一覧を取得し、propsとして`ArticleList`（CC）に渡す。DBは読まない |
-| `app/topics/page.tsx` | SC | トピック一覧（固定データ）をpropsとして`TopicSelector`（CC）に渡す。現在の選択状態は`TopicSelector`内で`useFavoriteTopics`が取得する |
-| `app/bookmarks/page.tsx` | SC | 枠だけ。内容は中のCCが`useBookmarks`で取得する |
+| `app/login/page.tsx`・`app/signup/page.tsx` | SC | フォームの部分だけ`LoginForm`・`SignupForm`（CC）に任せる。`AppShell`は使わない |
+| `app/topics/[slug]/page.tsx` | SC（静的） | `AppShell`で囲み、`Suspense`配下で`lib/zenn.ts`から記事一覧を取得し、propsとして`ArticleList`（CC）に渡す。DBは読まない |
+| `app/topics/page.tsx` | SC | `AppShell`で囲み、トピック一覧（固定データ）をpropsとして`TopicSelector`（CC）に渡す。現在の選択状態は`TopicSelector`内で`useFavoriteTopics`が取得する |
+| `components/layout/AppShell` | SC | `Header`・`Footer`・（`hideNav`でなければ）`BottomNav`を並べるだけ |
 | `components/providers/QueryProvider` | CC | `QueryClientProvider`を提供するため |
 | `components/layout/Header`・`Footer` | SC | リンクと文字だけ。ログアウトボタンだけ内部で小さなCCに切り出す |
 | `components/layout/BottomNav` | CC | 今のURL（`usePathname`）で、強調するタブを変えるため |

@@ -16,9 +16,6 @@ export function Header({ minimal = false }: HeaderProps) {
           <Link href="/topics" className="hidden lg:inline">
             TOPICS
           </Link>
-          <Link href="/bookmarks" className="hidden lg:inline">
-            BOOKMARK
-          </Link>
           <LogoutButton />
         </nav>
       )}
