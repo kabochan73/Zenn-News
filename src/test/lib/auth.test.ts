@@ -48,8 +48,15 @@ describe("createSessionToken / verifySessionToken", () => {
   });
 
   it("改ざんされたトークンは false になる", async () => {
+    // Base64url の最後の1文字は、デコード時に無視される余りビットを含む場合があり、
+    // 末尾の文字だけを入れ替えると稀に「見た目は違うが同じ署名バイト列」になって
+    // しまう（意図せず改ざんになっていない）。真ん中の文字を変えることで、
+    // 常に実際の署名バイト列が変わるようにする。
     const token = await createSessionToken(PAYLOAD);
-    const tampered = `${token.slice(0, -1)}${token.endsWith("a") ? "b" : "a"}`;
+    const position = Math.floor(token.length / 2);
+    const replacement = token[position] === "a" ? "b" : "a";
+    const tampered =
+      token.slice(0, position) + replacement + token.slice(position + 1);
     expect(await verifySessionToken(tampered)).toBe(false);
   });
 

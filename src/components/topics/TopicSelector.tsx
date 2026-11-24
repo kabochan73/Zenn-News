@@ -71,7 +71,7 @@ export function TopicSelector() {
                         : "rounded-full border border-zinc-300 px-3 py-1.5 text-sm text-black"
                     }
                   >
-                    {isSelected ? `✓ ${topic.name}` : topic.name}
+                    {isSelected ? ` ${topic.name}` : topic.name}
                   </button>
                 );
               })}
