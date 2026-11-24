@@ -22,21 +22,21 @@
 
 ### フェーズ0. 土台づくり
 
-- [ ] `create-next-app`でプロジェクト作成（TypeScript・Tailwind・App Router）
-- [ ] ESLint・Prettierの設定
-- [ ] Gitリポジトリ初期化・最初のコミット
-- [ ] Neonでプロジェクトを作成し、`DATABASE_URL`を`.env.local`に設定
-- [ ] Drizzle・`@neondatabase/serverless`をインストールし、接続確認（簡単なクエリが通ることを確認）
+- [x] `create-next-app`でプロジェクト作成（TypeScript・Tailwind・App Router）
+- [x] ESLint・Prettierの設定
+- [x] Gitリポジトリ初期化・最初のコミット
+- [x] Neonでプロジェクトを作成し、`DATABASE_URL`を`.env.local`に設定
+- [x] Drizzle・`@neondatabase/serverless`をインストールし、接続確認（簡単なクエリが通ることを確認）
 
 **完了の目安**：`npm run dev` で初期画面が表示され、DBに接続できる
 
 ### フェーズ1. DBスキーマ
 
-- [ ] `lib/schema.ts`：`users`テーブルを定義
-- [ ] `lib/schema.ts`：`bookmarks`テーブルを定義
-- [ ] `lib/schema.ts`：`read_articles`テーブルを定義
-- [ ] `lib/db.ts`：Drizzleクライアントの初期化
-- [ ] Drizzle Kitでマイグレーションを生成・実行し、Neon上にテーブルが作られることを確認
+- [x] `lib/schema.ts`：`users`テーブルを定義
+- [x] `lib/schema.ts`：`bookmarks`テーブルを定義
+- [x] `lib/schema.ts`：`read_articles`テーブルを定義
+- [x] `lib/db.ts`：Drizzleクライアントの初期化
+- [x] Drizzle Kitでマイグレーションを生成・実行し、Neon上にテーブルが作られることを確認
 
 **完了の目安**：ローカルからNeonの各テーブルにクエリが通る
 
