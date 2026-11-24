@@ -68,7 +68,7 @@
 - [x] `hooks/useFavoriteTopics.ts`：TanStack Queryでの取得・更新
 - [x] `components/topics/TopicSelector.tsx`：カテゴリ別の選択UI
 - [x] `app/topics/page.tsx`：トピック設定画面
-- [ ] 初回誘導（`?welcome=1`）の表示切り替え（下のタブ・ヘッダーのリンクを隠す）※ヘッダー・下タブ自体はフェーズ5で作るため、それと合わせて対応する
+- [x] 初回誘導（`?welcome=1`）の表示切り替え（下のタブ・ヘッダーのリンクを隠す）※`components/layout/Header`・`BottomNav`・`Footer`・`AppShell`と合わせて追加対応
 - [x] `app/page.tsx`：入り口（クライアントで`useFavoriteTopics`を見て`redirect`）
 
 **完了の目安**：お気に入りの選択・保存・初回誘導が動き、2つ目のアカウントでも独立して動く

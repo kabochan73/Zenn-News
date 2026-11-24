@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { ArticleList } from "@/components/home/ArticleList";
 import { TopicBar } from "@/components/home/TopicBar";
 import { TopicSidebar } from "@/components/home/TopicSidebar";
+import { AppShell } from "@/components/layout/AppShell";
 import { getTopicBySlug, TOPICS } from "@/lib/topics";
 import { getArticlesByTopic } from "@/lib/zenn";
 
@@ -35,12 +36,14 @@ async function TopicFeed({ params }: { params: Params }) {
 
 export default function TopicPage(props: PageProps<"/topics/[slug]">) {
   return (
-    <Suspense
-      fallback={
-        <p className="px-4 py-8 text-sm text-zinc-500">読み込み中...</p>
-      }
-    >
-      <TopicFeed params={props.params} />
-    </Suspense>
+    <AppShell>
+      <Suspense
+        fallback={
+          <p className="px-4 py-8 text-sm text-zinc-500">読み込み中...</p>
+        }
+      >
+        <TopicFeed params={props.params} />
+      </Suspense>
+    </AppShell>
   );
 }
