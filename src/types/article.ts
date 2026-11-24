@@ -8,3 +8,13 @@ export type Article = {
     avatarUrl: string | null;
   };
 };
+
+export type Bookmark = {
+  articleId: number;
+  path: string;
+  title: string;
+  authorName: string;
+  authorAvatarUrl: string | null;
+  publishedAt: string;
+  bookmarkedAt: string;
+};
