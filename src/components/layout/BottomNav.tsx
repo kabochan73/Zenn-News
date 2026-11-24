@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const ITEMS = [
-  { href: "/", label: "HOME", icon: "🏠" },
-  { href: "/topics", label: "TOPICS", icon: "🏷" },
+  { href: "/", label: "HOME" },
+  { href: "/topics", label: "TOPICS" },
 ] as const;
 
 export function BottomNav() {
@@ -23,12 +23,11 @@ export function BottomNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-xs ${
+            className={`flex flex-1 items-center justify-center py-3 text-xs ${
               isActive ? "font-semibold" : "text-zinc-500"
             }`}
           >
-            <span aria-hidden>{item.icon}</span>
-            <span>{item.label}</span>
+            {item.label}
           </Link>
         );
       })}

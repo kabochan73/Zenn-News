@@ -1,3 +1,4 @@
+import { Bookmark } from "lucide-react";
 import { formatDateTime } from "@/lib/format";
 import type { Article } from "@/types/article";
 
@@ -47,13 +48,12 @@ export function ArticleCard({
         type="button"
         onClick={onToggleBookmark}
         aria-label={isBookmarked ? "ブックマークを解除" : "ブックマークする"}
-        className={
-          isBookmarked
-            ? "shrink-0 rounded-full bg-black px-2 py-1 text-xs text-white"
-            : "shrink-0 rounded-full border border-zinc-300 px-2 py-1 text-xs text-black"
-        }
+        className="shrink-0 text-black"
       >
-        🔖
+        <Bookmark
+          className="h-5 w-5"
+          fill={isBookmarked ? "currentColor" : "none"}
+        />
       </button>
     </div>
   );
