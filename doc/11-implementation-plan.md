@@ -76,7 +76,7 @@
 ### フェーズ5. ホーム画面
 
 - [ ] `components/providers/QueryProvider.tsx`をルートレイアウトに組み込む
-- [ ] `app/topics/[slug]/page.tsx`：`generateStaticParams`で全41トピックを対象にし、`dynamicParams = false`を設定。記事一覧を取得・表示
+- [ ] `app/topics/[slug]/page.tsx`：`generateStaticParams`で全41トピックを対象にし、未知のslugは`notFound()`で404に。記事一覧を取得・表示
 - [ ] `components/home/TopicBar.tsx`・`TopicSidebar.tsx`
 - [ ] `components/home/ArticleCard.tsx`
 - [ ] `app/api/me/read-articles/route.ts`・`app/api/me/bookmarks/route.ts`（GETのみ）

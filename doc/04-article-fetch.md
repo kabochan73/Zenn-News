@@ -23,7 +23,7 @@
 
 トピックは41個の固定リストなので、`app/topics/[slug]/page.tsx`で`generateStaticParams()`が`lib/topics.ts`の全41トピックのslugを返すようにし、ビルド時に41ページすべてを静的化する。これにより、`'use cache'`の結果が通常のISRキャッシュと同じ仕組みで保持され、`cacheLife`の`revalidate`に従って更新される。
 
-トピックは管理画面を作らずコードで固定する方針（[機能要件](02-features.md#トピック)）なので、未知のslugへのアクセスは`dynamicParams = false`で404にする（存在しないトピックのために動的生成の仕組みを持つ必要がない）。
+トピックは管理画面を作らずコードで固定する方針（[機能要件](02-features.md#トピック)）なので、未知のslugへのアクセスはページ内で`getTopicBySlug`の結果を見て`notFound()`を呼び404にする。`dynamicParams`ルートセグメント設定はCache Components有効時は使えないため、コード側のチェックだけで対応する。
 
 ## 既読・ブックマーク状態の反映（クライアント側）
 
