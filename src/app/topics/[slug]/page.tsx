@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
-import { ArticleCard } from "@/components/home/ArticleCard";
+import { Suspense } from "react";
+import { ArticleList } from "@/components/home/ArticleList";
+import { TopicBar } from "@/components/home/TopicBar";
+import { TopicSidebar } from "@/components/home/TopicSidebar";
 import { getTopicBySlug, TOPICS } from "@/lib/topics";
 import { getArticlesByTopic } from "@/lib/zenn";
 
@@ -7,9 +10,9 @@ export function generateStaticParams() {
   return TOPICS.map((topic) => ({ slug: topic.slug }));
 }
 
-export default async function TopicPage({
-  params,
-}: PageProps<"/topics/[slug]">) {
+type Params = PageProps<"/topics/[slug]">["params"];
+
+async function TopicFeed({ params }: { params: Params }) {
   const { slug } = await params;
   const topic = getTopicBySlug(slug);
 
@@ -20,19 +23,24 @@ export default async function TopicPage({
   const articles = await getArticlesByTopic(slug);
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-6">
-      <h1 className="text-lg font-bold">{topic.name}</h1>
-      <ul className="flex flex-col">
-        {articles.map((article) => (
-          <li key={article.id}>
-            <ArticleCard
-              article={article}
-              isRead={false}
-              isBookmarked={false}
-            />
-          </li>
-        ))}
-      </ul>
-    </main>
+    <div className="flex flex-1 flex-col lg:flex-row">
+      <TopicSidebar activeSlug={slug} />
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
+        <TopicBar activeSlug={slug} />
+        <ArticleList articles={articles} />
+      </div>
+    </div>
+  );
+}
+
+export default function TopicPage(props: PageProps<"/topics/[slug]">) {
+  return (
+    <Suspense
+      fallback={
+        <p className="px-4 py-8 text-sm text-zinc-500">読み込み中...</p>
+      }
+    >
+      <TopicFeed params={props.params} />
+    </Suspense>
   );
 }

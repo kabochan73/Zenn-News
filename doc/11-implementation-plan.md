@@ -75,13 +75,13 @@
 
 ### フェーズ5. ホーム画面
 
-- [ ] `components/providers/QueryProvider.tsx`をルートレイアウトに組み込む
-- [ ] `app/topics/[slug]/page.tsx`：`generateStaticParams`で全41トピックを対象にし、未知のslugは`notFound()`で404に。記事一覧を取得・表示
-- [ ] `components/home/TopicBar.tsx`・`TopicSidebar.tsx`
-- [ ] `components/home/ArticleCard.tsx`
-- [ ] `app/api/me/read-articles/route.ts`・`app/api/me/bookmarks/route.ts`（GETのみ）
-- [ ] `hooks/useReadArticles.ts`・`hooks/useBookmarks.ts`（取得部分のみ）
-- [ ] `components/home/ArticleList.tsx`・`HomeTabs.tsx`：NEW/READ/BOOKMARKへの振り分けと件数表示
+- [x] `components/providers/QueryProvider.tsx`をルートレイアウトに組み込む
+- [x] `app/topics/[slug]/page.tsx`：`generateStaticParams`で全41トピックを対象にし、未知のslugは`notFound()`で404に。記事一覧を取得・表示（slug依存の処理は`<Suspense>`で囲み、instant navigation検証の警告に対応）
+- [x] `components/home/TopicBar.tsx`・`TopicSidebar.tsx`
+- [x] `components/home/ArticleCard.tsx`
+- [x] `app/api/me/read-articles/route.ts`・`app/api/me/bookmarks/route.ts`（GETのみ）
+- [x] `hooks/useReadArticles.ts`・`hooks/useBookmarks.ts`（取得部分のみ）
+- [x] `components/home/ArticleList.tsx`・`HomeTabs.tsx`：NEW/READ/BOOKMARKへの振り分けと件数表示
 
 **完了の目安**：任意のトピックのページで記事一覧が表示され、取得後に既読・ブックマークの状態とタブの件数が正しく反映される
 

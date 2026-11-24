@@ -76,6 +76,7 @@ src/
 - 記事一覧は全員（＝全ユーザー）共通のデータなので、ページとしてキャッシュできる
 - 個人データ（既読・ブックマーク）はDBにあるが、ページ自体を静的化するには、ページの中でCookie・DBを読まないようにする必要がある。そのため既読・ブックマークの反映はクライアント側（`useReadArticles`・`useBookmarks`、TanStack Query）で行う
 - インストールされているNext.js 16はCache Components（`'use cache'`）が既定で有効で、素の`'use cache'`はサーバーレス環境だとリクエスト間で保持されない場合があるため、トピックが41個の固定リストであることを利用して`generateStaticParams`で全件をビルド時に静的化する（詳細は [記事の取得](04-article-fetch.md#ビルド時に全トピックを静的化するgeneratestaticparams)）
+- Cache Componentsは「instant navigation」の検証機能を持ち、`params`を`<Suspense>`の外で`await`すると警告が出る。そのため`page.tsx`本体は`Suspense`の配置だけを行い、`params`を読んでZenn APIを呼ぶ処理（`TopicBar`・`TopicSidebar`・`ArticleList`を含む）は`Suspense`配下の子コンポーネントに分離している
 
 ### 既読・ブックマークをクライアント側で取得する理由（設計の経緯）
 
