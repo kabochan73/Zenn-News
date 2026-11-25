@@ -17,5 +17,9 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
+    // ファイルごとにjsdom環境を作り直すと起動コストが大きく、テストファイルが
+    // 増えるほど並列実行時の負荷が上がってタイムアウトが不安定になる。
+    // 環境をワーカー間で共有し、起動コストを減らす。
+    isolate: false,
   },
 });
