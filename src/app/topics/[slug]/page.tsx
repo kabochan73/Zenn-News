@@ -37,11 +37,7 @@ async function TopicFeed({ params }: { params: Params }) {
 export default function TopicPage(props: PageProps<"/topics/[slug]">) {
   return (
     <AppShell>
-      <Suspense
-        fallback={
-          <p className="px-4 py-8 text-sm text-zinc-500">読み込み中...</p>
-        }
-      >
+      <Suspense fallback={null}>
         <TopicFeed params={props.params} />
       </Suspense>
     </AppShell>
