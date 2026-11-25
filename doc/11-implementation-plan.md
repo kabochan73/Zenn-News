@@ -118,13 +118,12 @@
 
 ### フェーズ9. デプロイ
 
-- [ ] GitHubリポジトリ作成・push
-- [ ] Vercelプロジェクト作成・GitHub連携
-- [ ] Vercel Postgres（Neon）を本番用に追加
-- [ ] 環境変数（`DATABASE_URL`・`AUTH_SECRET`）をVercelに設定
-- [ ] 本番DBへのマイグレーション実行
-- [ ] GitHub Actions（`.github/workflows/ci.yml`）でLint・テスト・ビルドを設定
-- [ ] 本番URLで複数アカウントを作り、動作確認
+- [x] GitHubリポジトリ作成・push（`kabochan73/Zenn-News`）
+- [x] Vercelプロジェクト作成・GitHub連携
+- [x] DBは開発用と本番用を分けず、既存のNeon DBを共有する方針に変更（ハッカソン向けに手間を減らすため。マイグレーションは済んでいるので本番側での再実行は不要）
+- [x] 環境変数（`DATABASE_URL`・`AUTH_SECRET`）をVercelに設定（`AUTH_SECRET`の未設定・再デプロイ漏れでサインアップ/ログインが500になる不具合があったが、設定後に再デプロイして解消）
+- [x] GitHub Actions（`.github/workflows/ci.yml`）でLint・テスト・ビルドを設定
+- [x] 本番URLで動作確認（サインアップ→お気に入り設定→トピックページ表示→保護ページのリダイレクト→ログアウト→重複ユーザー名・パスワード間違いのエラーまで確認済み）
 
 **完了の目安**：pushでVercelに自動デプロイされ、本番で複数アカウントを作って一通り使える
 
