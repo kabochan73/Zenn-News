@@ -4,7 +4,7 @@ import type { Article } from "@/types/article";
 
 const ZENN_API_BASE = "https://zenn.dev/api/articles";
 const USER_AGENT = "ZennNews/1.0 (+https://github.com/kabochan73/Zenn-News)";
-const ARTICLES_PER_TOPIC = 30;
+const ARTICLES_PER_TOPIC = 100;
 
 type ZennApiArticle = {
   id: number;

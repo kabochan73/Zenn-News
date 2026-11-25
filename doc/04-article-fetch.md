@@ -6,9 +6,9 @@
 
 | 項目 | 仕様 |
 |---|---|
-| 取得元 | Zenn 非公式 API `GET https://zenn.dev/api/articles?topicname={slug}&order=latest&count=30` |
+| 取得元 | Zenn 非公式 API `GET https://zenn.dev/api/articles?topicname={slug}&order=latest&count=100` |
 | User-Agent | `ZennNews/1.0 (+https://github.com/<ユーザー名>/<リポジトリ名>)`。アクセス元と連絡先が Zenn 側から分かるようにする |
-| 取得件数 | トピックごとに最新30件 |
+| 取得件数 | トピックごとに最新100件 |
 | 記事の種類 | Tech と Idea の両方 |
 | 呼び出し場所 | `/topics/[slug]` の Server Component から、`lib/zenn.ts` の関数経由で呼ぶ（自分のAPI経由にしない） |
 | 更新方式 | 決まった時刻に一括取得する処理はしない。Next.js 16 の Cache Components（`'use cache'` ＋ `cacheLife()`）に任せる。ページ自体がCookie・DBを読まないため、ページ全体を全ユーザー共通のHTMLとしてキャッシュできる |
@@ -41,7 +41,7 @@ TanStack Queryが取得結果をクライアント側にキャッシュするた
 
 ## なぜ記事データ自体をDBに保存しないか
 
-Zenn側に記事データの正本があり、新しい記事は増え続けるため、全件を保存・同期する仕組み（バッチ処理・削除ルール）を作る必要がない。`cacheLife`の`revalidate`だけで「古くなったら裏側で取り直す」が実現できる。ブックマークだけは、元記事が最新30件から外れた後も見られる必要があるため、カード表示に必要な情報だけをDBにコピーする。
+Zenn側に記事データの正本があり、新しい記事は増え続けるため、全件を保存・同期する仕組み（バッチ処理・削除ルール）を作る必要がない。`cacheLife`の`revalidate`だけで「古くなったら裏側で取り直す」が実現できる。ブックマークだけは、元記事が最新100件から外れた後も見られる必要があるため、カード表示に必要な情報だけをDBにコピーする。
 
 ## 取り込むトピック一覧（41個）
 
