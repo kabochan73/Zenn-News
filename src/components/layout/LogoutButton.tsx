@@ -2,12 +2,15 @@
 
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function LogoutButton() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   async function handleLogout() {
     await fetch("/api/logout", { method: "POST" });
+    queryClient.clear();
     router.push("/");
     router.refresh();
   }
