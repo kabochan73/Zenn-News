@@ -3,6 +3,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const FAVORITE_TOPICS_QUERY_KEY = ["favorite-topics"];
+const STALE_TIME_MS = 10 * 60 * 1000;
+const GC_TIME_MS = 10 * 60 * 1000;
 
 async function fetchFavoriteTopics(): Promise<string[]> {
   const res = await fetch("/api/me/favorite-topics");
@@ -35,6 +37,8 @@ export function useFavoriteTopics() {
   const query = useQuery({
     queryKey: FAVORITE_TOPICS_QUERY_KEY,
     queryFn: fetchFavoriteTopics,
+    staleTime: STALE_TIME_MS,
+    gcTime: GC_TIME_MS,
   });
 
   const mutation = useMutation({

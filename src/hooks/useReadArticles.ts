@@ -3,6 +3,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const READ_ARTICLES_QUERY_KEY = ["read-articles"];
+const STALE_TIME_MS = 10 * 60 * 1000;
+const GC_TIME_MS = 10 * 60 * 1000;
 
 async function fetchReadArticleIds(): Promise<number[]> {
   const res = await fetch("/api/me/read-articles");
@@ -30,6 +32,8 @@ export function useReadArticles() {
   const query = useQuery({
     queryKey: READ_ARTICLES_QUERY_KEY,
     queryFn: fetchReadArticleIds,
+    staleTime: STALE_TIME_MS,
+    gcTime: GC_TIME_MS,
   });
 
   const mutation = useMutation({

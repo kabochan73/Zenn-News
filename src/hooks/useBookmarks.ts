@@ -4,6 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Bookmark } from "@/types/article";
 
 const BOOKMARKS_QUERY_KEY = ["bookmarks"];
+const STALE_TIME_MS = 10 * 60 * 1000;
+const GC_TIME_MS = 10 * 60 * 1000;
 
 type NewBookmark = {
   articleId: number;
@@ -57,6 +59,8 @@ export function useBookmarks() {
   const query = useQuery({
     queryKey: BOOKMARKS_QUERY_KEY,
     queryFn: fetchBookmarks,
+    staleTime: STALE_TIME_MS,
+    gcTime: GC_TIME_MS,
   });
 
   const addMutation = useMutation({
