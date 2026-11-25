@@ -38,7 +38,7 @@
 | Cookie | httpOnly・secure（本番）・sameSite=lax、有効期限30日 |
 | 検証場所 | `proxy.ts`（Next.js 16の仕組み。旧称Middleware、デフォルトでNode.jsランタイム）。DBにはアクセスせず、JWTの署名と期限だけを見る |
 | 検証方法 | `jose` の `jwtVerify(token, secretKey)` を使う。**独自の署名比較ロジックは書かない**（下記「注意」参照） |
-| 未ログイン・検証失敗時 | `/login`・`/signup` 以外へのアクセスはすべて `/login` にリダイレクトする |
+| 未ログイン・検証失敗時 | `/`・`/login`・`/signup` 以外へのアクセスはすべて `/login` にリダイレクトする |
 
 ### 注意：旧版で見つかったバグ
 
@@ -51,6 +51,7 @@
 
 ## ルート保護（`proxy.ts`）
 
-- `/login`・`/signup`・静的アセット以外のすべてのパスを保護する
+- `/`・`/login`・`/signup`・静的アセット以外のすべてのパスを保護する
+- `/` は未ログインでも紹介ページとして見られるようにするため公開パスにしている。ページ自身が`getCurrentSession()`で分岐し、ログイン済みなら通常の入り口処理を行う（[画面](05-screens.md) 参照）
 - 未ログイン、または JWT が無効（署名不一致・期限切れ）の場合は `/login` にリダイレクトする
-- DBへの問い合わせは行わない（JWTの検証のみ）。ユーザーIDが必要なページ（`/`、`/topics`、`/topics/[slug]` など）は、各 Server Component 内で Cookie から再度 JWT をデコードしてユーザーIDを取得する
+- DBへの問い合わせは行わない（JWTの検証のみ）。ユーザーIDが必要なページ（`/topics`、`/topics/[slug]` など）は、各 Server Component 内で Cookie から再度 JWT をデコードしてユーザーIDを取得する

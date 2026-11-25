@@ -1,24 +1,22 @@
-"use client";
+import { Suspense } from "react";
+import { HomeEntryRedirect } from "@/components/marketing/HomeEntryRedirect";
+import { LandingPage } from "@/components/marketing/LandingPage";
+import { getCurrentSession } from "@/lib/auth";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useFavoriteTopics } from "@/hooks/useFavoriteTopics";
+async function HomeContent() {
+  const session = await getCurrentSession();
+
+  if (session) {
+    return <HomeEntryRedirect />;
+  }
+
+  return <LandingPage />;
+}
 
 export default function HomePage() {
-  const router = useRouter();
-  const { favoriteTopics, isLoading } = useFavoriteTopics();
-
-  useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-
-    if (favoriteTopics.length === 0) {
-      router.replace("/topics?welcome=1");
-    } else {
-      router.replace(`/topics/${favoriteTopics[0]}`);
-    }
-  }, [isLoading, favoriteTopics, router]);
-
-  return null;
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
+  );
 }

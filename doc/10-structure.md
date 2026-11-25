@@ -6,13 +6,13 @@
 
 ```
 src/
-├── proxy.ts                         認証チェック（/login, /signup 以外のすべてのパスを保護。JWT検証のみ）
+├── proxy.ts                         認証チェック（/, /login, /signup 以外のすべてのパスを保護。JWT検証のみ）
 ├── app/                                  画面とルーティング（App Router）
 │   ├── layout.tsx                        ルートのレイアウト（QueryProviderで全体を包む。ヘッダー・フッターは各ページの`AppShell`が出す）
 │   ├── globals.css
 │   ├── not-found.tsx                     404ページ
 │   ├── error.tsx                         エラー画面
-│   ├── page.tsx                          入り口            /（クライアントでお気に入りトピックを見て移動先を決める）
+│   ├── page.tsx                          紹介ページ/入り口  /（未ログインなら紹介ページ、ログイン済みならお気に入りトピックを見て移動先を決める）
 │   ├── login/page.tsx                    ログイン           /login
 │   ├── signup/page.tsx                   サインアップ       /signup
 │   ├── topics/
@@ -30,6 +30,7 @@ src/
 │   ├── providers/QueryProvider.tsx       TanStack Queryの `QueryClientProvider`（CC）
 │   ├── ui/                               自作の汎用部品（Button、Toast）
 │   ├── layout/                           Header（TOPICSリンク・ログアウトボタン）、BottomNav、Footer、AppShell
+│   ├── marketing/                        LandingPage（紹介ページ本体）、HomeEntryRedirect（ログイン済み時のリダイレクト処理）
 │   ├── home/                             TopicBar、TopicSidebar、HomeTabs、ArticleCard、ArticleList
 │   ├── topics/                           TopicSelector（カテゴリ別のトピック選択）
 │   └── auth/                             LoginForm、SignupForm
@@ -58,7 +59,7 @@ src/
 | 画面 | 方式 | 理由 |
 |---|---|---|
 | `/login`・`/signup` | SSG ＋ ブラウザで処理 | フォームの入力・送信のみ |
-| `/`（入り口） | SSG ＋ ブラウザで処理 | `useFavoriteTopics`（TanStack Query）で取得し、クライアントで最初のトピック（または `/topics?welcome=1`）へ `router.replace()` する |
+| `/`（紹介ページ/入り口） | SC（動的、`Suspense`配下） | `getCurrentSession()`でCookieを見て分岐する。未ログイン：`LandingPage`（静的な紹介ページ）を表示。ログイン済み：`HomeEntryRedirect`（CC）が`useFavoriteTopics`で取得し、最初のトピック（または`/topics?welcome=1`）へ`router.replace()`する |
 | `/topics/[slug]` | **静的（`generateStaticParams`で全41トピックをビルド時に生成、`'use cache'`＋`cacheLife`で更新）** | Zenn APIから取得した記事一覧は全ユーザー共通なので、トピックごとにページ全体をキャッシュできる（詳細は [記事の取得](04-article-fetch.md)）。既読・🔖の状態は `useReadArticles`・`useBookmarks` がクライアントで取得して重ねる |
 | `/topics` | SSG ＋ ブラウザで処理 | トピック一覧（41個）は固定なのでビルド時に作る。選択状態は `useFavoriteTopics` で取得する |
 | `not-found` | SSG | 固定の内容 |
@@ -97,7 +98,8 @@ src/
 | ファイル | 種類 | 理由 |
 |---|---|---|
 | `app/layout.tsx` | SC | `QueryProvider`（CC）で全体を包むだけ。ヘッダー・フッターはページ側の`AppShell`が出す |
-| `app/page.tsx`（入り口） | SC | 中で移動処理用の小さなCC（`useFavoriteTopics`を使う）を表示するだけ |
+| `app/page.tsx`（紹介ページ/入り口） | SC（`Suspense`配下でCookieを見て分岐） | 未ログイン：`LandingPage`（SC）。ログイン済み：移動処理用の小さなCC（`HomeEntryRedirect`、`useFavoriteTopics`を使う） |
+| `components/marketing/LandingPage` | SC | リンクと文字だけの静的な紹介ページ。インタラクションがないのでCCにしない |
 | `app/login/page.tsx`・`app/signup/page.tsx` | SC | フォームの部分だけ`LoginForm`・`SignupForm`（CC）に任せる。`AppShell`は使わない |
 | `app/topics/[slug]/page.tsx` | SC（静的） | `AppShell`で囲み、`Suspense`配下で`lib/zenn.ts`から記事一覧を取得し、propsとして`ArticleList`（CC）に渡す。DBは読まない |
 | `app/topics/page.tsx` | SC | `AppShell`で囲み、トピック一覧（固定データ）をpropsとして`TopicSelector`（CC）に渡す。現在の選択状態は`TopicSelector`内で`useFavoriteTopics`が取得する |
