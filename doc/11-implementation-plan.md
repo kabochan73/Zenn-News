@@ -107,12 +107,12 @@
 
 ### フェーズ8. 仕上げ
 
-- [ ] 空の状態（NEW・READ・BOOKMARKそれぞれ0件のとき）
-- [ ] `app/error.tsx`・`app/not-found.tsx`
-- [ ] レスポンシブ対応（スマホ・PC）の最終調整
-- [ ] Vitest：`lib/auth.ts`のテスト（改ざん・期限切れトークンを含む）
-- [ ] Vitest：主要コンポーネントのテスト
-- [ ] Lint・テストが通ることを確認
+- [x] 空の状態（NEW・READ・BOOKMARKそれぞれ0件のとき。`ArticleList`の`EMPTY_MESSAGE`、フェーズ6で実装済み）
+- [x] `app/error.tsx`・`app/not-found.tsx`
+- [x] レスポンシブ対応（スマホ・PC）の最終調整（`TopicBar`/`TopicSidebar`の切り替え、`Header`/`BottomNav`の切り替え、`max-w-4xl`での横幅統一、Footerの重なり修正など）
+- [x] Vitest：`lib/auth.ts`のテスト（改ざん・期限切れトークンを含む）
+- [x] Vitest：主要コンポーネントのテスト（`HomeTabs`・`ArticleCard`・`LoginForm`・`SignupForm`・`TopicSelector`・`useReadArticles`・`useBookmarks`・`useFavoriteTopics`、計40件）
+- [x] Lint・テストが通ることを確認
 
 **完了の目安**：[画面](05-screens.md) の仕様を満たし、Lint・テストが通る
 
