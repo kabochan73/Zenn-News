@@ -14,6 +14,9 @@ export function Header({ minimal = false }: HeaderProps) {
         </Link>
         {!minimal && (
           <nav className="flex items-center gap-6 text-lg">
+            <Link href="/" className="hidden lg:inline">
+              HOME
+            </Link>
             <Link href="/topics" className="hidden lg:inline">
               TOPICS
             </Link>
